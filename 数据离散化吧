@@ -1,0 +1,45 @@
+package nowcode.ecnu;
+
+import java.util.Arrays;
+import java.util.HashMap;
+//数组离散化？ 把数组中long长度的数映射到int的范围内
+public class DiscreteArray {
+	public static void main(String[] args) {
+		long[] arr = { 99999999, 1000000000, 1, 1, 15, 777777 };
+		long[] same= new long[arr.length];
+		for(int i=0;i<arr.length;i++)
+			same[i] = arr[i];
+		HashMap<Long, Integer> map = new HashMap<Long, Integer>();// key存原来的值，value存离散化后的值
+		int[] dis = new int[arr.length];
+		Arrays.sort(arr);
+		for (int i = 0; i < arr.length; i++)
+			System.out.print(arr[i]+" ");
+		System.out.println();
+
+		map.put(arr[0], 0);
+		for (int i = 1; i < arr.length; i++) {
+			if (arr[i] == arr[i - 1])
+				map.put(arr[i], map.get(arr[i - 1]));
+			else
+				map.put(arr[i], i);
+		}
+
+		for (int i = 0; i < arr.length; i++)
+			dis[i] = map.get(arr[i]);
+
+		for (int i = 0; i < arr.length; i++)
+			System.out.print(dis[i]+" ");
+		
+		System.out.println();
+		
+		for(int i=0;i<arr.length;i++)
+			System.out.print("same:"+same[i]+" ");
+		System.out.println();
+		
+		for(int i=0;i<arr.length;i++)
+			dis[i] = map.get(same[i]);
+		
+		for (int i = 0; i < arr.length; i++)
+			System.out.print(dis[i]+" ");
+	}
+}
