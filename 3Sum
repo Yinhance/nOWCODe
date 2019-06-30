@@ -1,0 +1,74 @@
+package nowcode.bit;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+/**
+ * 给定一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得 a + b + c = 0？
+ * 找出所有满足条件且不重复的三元组。
+ * 
+ * 注意：答案中不可以包含重复的三元组。
+ * 
+ * 来源：力扣（LeetCode） 链接：https://leetcode-cn.com/problems/3sum
+ * 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+ * 
+ * @author 尹航
+ *
+ */
+public class ThreeSum {
+	static List<List<Integer>> list = new ArrayList<List<Integer>>();
+
+	public void swap(int i, int j, int[] a) {
+		int t = a[i];
+		a[i] = a[j];
+		a[j] = t;
+	}
+	//重写compare
+	public class comparaInteger implements java.util.Comparator<Integer> {
+		@Override
+		public int compare(Integer a, Integer b) {
+			if (a > b)
+				return 1;
+			if (a == b)
+				return 0;
+			return -1;
+		}
+	}
+
+	public boolean contain(List<List<Integer>> list1, List<Integer> list2) {
+		for (int i = 0; i < list1.size(); i++) {
+			Collections.sort(list1.get(i), new comparaInteger());
+			Collections.sort(list2, new comparaInteger());
+			if (list1.get(i).get(0) == list2.get(0) && list1.get(i).get(1) == list2.get(1)
+					&& list1.get(i).get(2) == list2.get(2)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public void sort(int start, int end, int[] a) {
+		if (start == end) {
+			List<Integer> list2 = new ArrayList<Integer>();
+			for (int i = 0; i < 3; i++) {
+				list2.add(a[i]);
+			}
+			if (!contain(list, list2) && list2.get(0) + list2.get(1) + list2.get(2) == 0)
+				list.add(list2);
+		} else {
+			for (int i = start; i <= end; i++) {
+				swap(i, start, a);
+				sort(start + 1, end, a);
+				swap(i, start, a);
+			}
+		}
+	}
+
+	public static void main(String[] args) {
+		int[] nums = { -1, 0, 1, 2, -1, -4 };
+		ThreeSum ts = new ThreeSum();
+		ts.sort(0, nums.length - 1, nums);
+		System.out.println(list.toString());
+	}
+}
